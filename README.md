@@ -8,7 +8,7 @@ No browser, no WezTerm/Kitty, no WSL, no TeX install.
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![node](https://img.shields.io/badge/node-%E2%89%A5%2022.19-brightgreen.svg)](package.json)
 
-<img src="https://raw.githubusercontent.com/GuChongAn/pi-sixel-math/main/docs/images/hero.png" alt="Formulas rendered by pi-sixel-math" width="620">
+<img src="https://raw.githubusercontent.com/GuChongAn/pi-sixel-math/main/docs/images/hero.png" alt="SIXEL formulas rendered in the Pi TUI on Windows Terminal" width="900">
 
 Pi renders inline images through the Kitty and iTerm2 protocols only, and Windows
 Terminal implements neither — so image-based math extensions silently do nothing

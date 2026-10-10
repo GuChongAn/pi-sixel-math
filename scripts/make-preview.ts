@@ -1,5 +1,5 @@
 /**
- * Builds `docs/images/hero.png` from the real renderer output.
+ * Builds `docs/images/rendered.png` from the real renderer output.
  *
  * The preview is the exact pixel data the terminal receives, only scaled 2x, so
  * what the README shows is what Windows Terminal paints.
@@ -73,8 +73,8 @@ async function main(): Promise<void> {
 
 	const scaled = upscale(canvas.data, canvas.width, canvas.height, SCALE);
 	mkdirSync("docs/images", { recursive: true });
-	writeFileSync("docs/images/hero.png", encodePng(scaled.width, scaled.height, scaled.data));
-	console.log(`docs/images/hero.png: ${scaled.width}x${scaled.height}px`);
+	writeFileSync("docs/images/rendered.png", encodePng(scaled.width, scaled.height, scaled.data));
+	console.log(`docs/images/rendered.png: ${scaled.width}x${scaled.height}px`);
 }
 
 main().catch((error: unknown) => {

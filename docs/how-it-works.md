@@ -36,7 +36,10 @@ down proportionally (never re-wrapped).
 
 `src/renderer/raster.ts` renders the SVG with resvg at 4× and box-filters it down,
 which gives anti-aliased edges instead of jagged ones. The result is composited
-over the configured terminal background.
+over the configured terminal background. `npm run preview` writes exactly the
+pixels that are sent to the terminal:
+
+![Rendered formula pixels, 2x scale](images/rendered.png)
 
 System fonts are deliberately **not** loaded: MathJax emits glyph outlines, and
 enumerating the Windows font directory costs ~150 ms per call — about 15× the cost
