@@ -1,6 +1,6 @@
 {
   "name": "pi-sixel-math",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Real LaTeX math in the Pi agent TUI as SIXEL images, built for Windows Terminal",
   "keywords": [
     "pi-package",
@@ -30,7 +30,6 @@
     "dist",
     "docs/how-it-works.md",
     "docs/testing.md",
-    "docs/images/hero.png",
     "README.md",
     "CHANGELOG.md",
     "LICENSE"
@@ -39,7 +38,7 @@
     "extensions": [
       "./src/index.ts"
     ],
-    "image": "./docs/images/hero.png"
+    "image": "https://raw.githubusercontent.com/GuChongAn/pi-sixel-math/main/docs/images/hero.png"
   },
   "engines": {
     "node": ">=22.19.0"

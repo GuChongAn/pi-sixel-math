@@ -3,6 +3,16 @@
 All notable changes to this project are documented here. This project follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.2] - 2026-10-10
+
+### Changed
+
+- `pi.image` now points at the screenshot's stable GitHub URL instead of a path
+  inside the tarball, matching what other Pi packages do for gallery previews.
+  The 500 kB screenshot is no longer shipped to every installer (npm tarball:
+  578 kB → 85 kB); it stays in the repository and in the README, which already
+  uses the same URL.
+
 ## [0.1.1] - 2026-10-10
 
 ### Fixed
@@ -38,5 +48,6 @@ First release.
 - `npm run probe` measures Windows Terminal's SIXEL cursor behaviour and the
   terminal's background color.
 
+[0.1.2]: https://github.com/GuChongAn/pi-sixel-math/releases/tag/v0.1.2
 [0.1.1]: https://github.com/GuChongAn/pi-sixel-math/releases/tag/v0.1.1
 [0.1.0]: https://github.com/GuChongAn/pi-sixel-math/releases/tag/v0.1.0
