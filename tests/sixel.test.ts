@@ -25,8 +25,22 @@ test("sixel output is a well-formed DCS string", () => {
 	assert.ok(encoded.startsWith("\x1bP"));
 	assert.ok(encoded.endsWith("\x1b\\"));
 	assert.ok(encoded.includes('"1;1;4;6'));
+	// P2 = 1 (background transparent). With P2 = 0 Windows Terminal fills the
+	// whole raster rectangle with the background color, which paints a black box
+	// around every formula.
+	assert.ok(encoded.startsWith("\x1bP0;1;0q"), `expected a transparent background selection, got ${encoded.slice(0, 10)}`);
 	// No stray escape sequences inside the payload, which would break the TUI.
 	assert.equal(encoded.slice(2, -2).includes("\x1b"), false);
+});
+
+test("without a background, mostly transparent pixels are not painted", () => {
+	const image = makeImage(12, 6, (x) => (x < 6 ? [255, 255, 255, 0] : [255, 255, 255, 255]));
+	const encoded = imageToSixel(image, { maxColors: 4 });
+	const decoded = decodeSixel(encoded);
+	const alphaAt = (x: number, y: number): number => decoded.pixels[(y * decoded.width + x) * 4 + 3];
+	assert.equal(alphaAt(0, 0), 0, "fully transparent pixels must stay unpainted");
+	assert.equal(alphaAt(3, 3), 0);
+	assert.equal(alphaAt(9, 0), 255, "opaque pixels must be painted");
 });
 
 test("sixel round-trips through the decoder", () => {

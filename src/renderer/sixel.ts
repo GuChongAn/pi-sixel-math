@@ -195,27 +195,31 @@ function rgbToKey(color: Rgb): number {
 }
 
 /**
- * Mark palette entries that match the background as transparent.
+ * Mark palette entries that match the background as transparent, or — when no
+ * background is known — leave every mostly-transparent pixel unpainted.
  *
  * A typeset formula is mostly empty space. Making that space transparent both
  * shrinks the encoded image dramatically and lets the terminal's own background
- * show through, so the image blends into the transcript instead of forming a
- * visible rectangle.
+ * (color, wallpaper or acrylic) show through, so the image blends into the
+ * transcript instead of forming a visible rectangle.
  */
 function applyTransparency(palette: SixelPalette, image: RgbaImage, background: Rgb | undefined, tolerance: number): SixelPalette {
-	if (!background) return palette;
 	const { data } = image;
+	const indices = new Int16Array(palette.indices);
+
+	if (!background) {
+		for (let i = 3, p = 0; i < data.length; i += 4, p++) {
+			if (data[i] < 128) indices[p] = -1;
+		}
+		return { colors: palette.colors, indices };
+	}
+
 	const threshold = tolerance * tolerance;
 	const transparentIndices = new Set<number>();
-	try {
-		for (let i = 0; i < palette.colors.length; i++) {
-			if (colorDistance(palette.colors[i], background) <= threshold) transparentIndices.add(i);
-		}
-	} catch {
-		return palette;
+	for (let i = 0; i < palette.colors.length; i++) {
+		if (colorDistance(palette.colors[i], background) <= threshold) transparentIndices.add(i);
 	}
 	if (transparentIndices.size === 0) return palette;
-	const indices = new Int16Array(palette.indices);
 	for (let p = 0; p < indices.length; p++) {
 		if (transparentIndices.has(indices[p])) indices[p] = -1;
 	}
@@ -246,7 +250,12 @@ export function encodeSixel(image: RgbaImage, palette: SixelPalette, options: Si
 	const aspectDenominator = options.aspectDenominator ?? 1;
 
 	const bands = Math.ceil(height / 6);
-	let out = `\x1bP0;0;0q"${aspectNumerator};${aspectDenominator};${width};${height}`;
+	// `P2 = 1` is the DEC "background transparent" selection, which is also what
+	// Windows Terminal checks to decide whether it fills the image area. Using
+	// `P2 = 0` (the default) makes the terminal paint the whole raster rectangle
+	// with the current background color, which shows up as a black box around the
+	// formula.
+	let out = `\x1bP0;1;0q"${aspectNumerator};${aspectDenominator};${width};${height}`;
 	for (let i = 0; i < colors.length; i++) {
 		const color = colors[i];
 		const grey = Math.round((color.r * 100) / 255);

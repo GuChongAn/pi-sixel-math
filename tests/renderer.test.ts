@@ -40,7 +40,7 @@ test("renders a formula into a decodable sixel image", () => {
 	});
 	assert.ok(image.columns >= 1);
 	assert.ok(image.rows >= 1);
-	assert.ok(image.dcs.startsWith("\x1bP"));
+	assert.ok(image.dcs.startsWith("\x1bP0;1;0q"), "formulas must use a transparent image background");
 	assert.equal(image.heightPx % 6, 0, "height must be a whole number of sixel bands");
 	assert.equal(raster.width, image.widthPx);
 	assert.equal(raster.height, image.heightPx);
@@ -92,6 +92,22 @@ test("the same formula renders identically twice (deterministic cache key)", () 
 	const first = renderMathToImageSync(String.raw`\alpha+\beta`, { display: true, maxColumns: 60, foreground, background });
 	const second = renderMathToImageSync(String.raw`\alpha+\beta`, { display: true, maxColumns: 60, foreground, background });
 	assert.equal(first.image.dcs, second.image.dcs);
+});
+
+test("transparent mode leaves the background unpainted", () => {
+	const { image } = renderMathToImageSync(String.raw`\frac{a}{b}`, {
+		display: true,
+		maxColumns: 40,
+		foreground,
+	});
+	const decoded = decodeSixel(image.dcs);
+	let painted = 0;
+	for (let i = 3; i < decoded.pixels.length; i += 4) {
+		if (decoded.pixels[i] > 0) painted++;
+	}
+	const coverage = painted / (decoded.width * decoded.height);
+	assert.ok(coverage > 0.05, `expected glyphs to be painted, coverage was ${coverage}`);
+	assert.ok(coverage < 0.6, `expected most of the image to stay transparent, coverage was ${coverage}`);
 });
 
 test("transparency keeps the payload small for sparse formulas", () => {

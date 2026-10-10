@@ -11,7 +11,12 @@ export interface MathImageOptions {
 	/** Columns available for the image (the transcript width). */
 	maxColumns: number;
 	foreground: Rgb;
-	background: Rgb;
+	/**
+	 * Color the glyph edges are blended against and that the encoder leaves
+	 * unpainted. Omit it to leave the background fully transparent and let the
+	 * terminal show through, which is what busy wallpapers or acrylic need.
+	 */
+	background?: Rgb;
 	cellWidthPx?: number;
 	cellHeightPx?: number;
 	/** Virtual pixels per `ex`. Defaults to `cellHeightPx / 2.5`, i.e. terminal font size. */
@@ -36,7 +41,6 @@ export interface MathImage {
 	display: boolean;
 	scaled: boolean;
 }
-
 export interface RenderedMath {
 	image: MathImage;
 	raster: RgbaImage;
@@ -103,7 +107,7 @@ export function renderMathToImageSync(latex: string, options: MathImageOptions):
 	// text, emoji) end up as SVG text elements, which need a real font database.
 	const loadSystemFonts = options.loadSystemFonts ?? /[^\x00-\x7f]/.test(latex);
 	const supersampled = rasterize(svg, finalWidthPx, finalHeightPx, ssaa, { loadSystemFonts });
-	const opaque = compositeOver(supersampled, options.background);
+	const opaque = options.background ? compositeOver(supersampled, options.background) : supersampled;
 	const dcs = imageToSixel(opaque, {
 		maxColors: options.maxColors ?? 24,
 		transparent: options.background,

@@ -127,7 +127,7 @@ test("applyMathPlan swaps the marker line for the image block", async () => {
 
 	const image = plan.blocks[0].image;
 	assert.ok(lines.some((line) => line.includes(image.dcs.slice(0, 12))));
-	const imageLine = lines.find((line) => line.includes("\x1bP0;0;0q"))!;
+	const imageLine = lines.find((line) => line.includes("\x1bP0;1;0q"))!;
 	assert.ok(imageLine.includes(image.dcs));
 	assert.ok(imageLine.includes("\x1b_Gi="));
 	// Reserved rows follow the image line, one per extra row.
@@ -147,12 +147,12 @@ test("installMathMarkdownPatch restores the original text and uninstalls cleanly
 	const patch = installMathMarkdownPatch({ enabled: () => true, maxColumns: 60, render: renderer(60) });
 	assert.notEqual(Markdown.prototype.render, original);
 	const lines = md.render(60);
-	assert.ok(lines.some((line) => line.includes("\x1bP0;0;0q")));
+	assert.ok(lines.some((line) => line.includes("\x1bP0;1;0q")));
 	assert.equal((md as unknown as { text: string }).text, source, "the component must keep the original LaTeX");
 	patch.uninstall();
 	assert.equal(Markdown.prototype.render, original);
 	const after = md.render(60);
-	assert.equal(after.some((line) => line.includes("\x1bP0;0;0q")), false);
+	assert.equal(after.some((line) => line.includes("\x1bP0;1;0q")), false);
 });
 
 test("disabling the patch falls back to the built-in renderer", () => {

@@ -93,10 +93,9 @@ export default function piSixelMath(pi: ExtensionAPI): void {
 				display,
 				maxColumns: Math.max(4, maxColumns),
 				foreground,
-				// Without a known background the formula is composited onto black and the
-				// encoder keeps the background transparent, which is indistinguishable on
-				// dark terminals and still readable on light ones.
-				background: background ?? { r: 0x1e, g: 0x1e, b: 0x1e },
+				// Without a known background the image is left fully transparent, which
+				// keeps formulas readable on wallpapers and acrylic backgrounds.
+				background,
 				cellWidthPx: config.cellWidthPx,
 				cellHeightPx: config.cellHeightPx,
 				exPx: config.exPx,
