@@ -1,0 +1,80 @@
+{
+	"name": "pi-sixel-math",
+	"version": "0.1.0",
+	"description": "Real LaTeX math in the Pi agent TUI as SIXEL images, built for Windows Terminal",
+	"keywords": [
+		"pi-package",
+		"pi-extension",
+		"pi",
+		"latex",
+		"mathjax",
+		"sixel",
+		"windows-terminal",
+		"terminal-image"
+	],
+	"license": "MIT",
+	"author": "GuChongan <62542111+GuChongAn@users.noreply.github.com>",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/GuChongAn/pi-sixel-math.git"
+	},
+	"homepage": "https://github.com/GuChongAn/pi-sixel-math#readme",
+	"bugs": {
+		"url": "https://github.com/GuChongAn/pi-sixel-math/issues"
+	},
+	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"src",
+		"dist",
+		"docs",
+		"README.md",
+		"CHANGELOG.md",
+		"LICENSE"
+	],
+	"pi": {
+		"extensions": [
+			"./src/index.ts"
+		],
+		"image": "./docs/images/hero.png"
+	},
+	"engines": {
+		"node": ">=22.19.0"
+	},
+	"scripts": {
+		"build": "tsc -p tsconfig.build.json",
+		"typecheck": "tsc -p tsconfig.json --noEmit",
+		"test": "node --import tsx --test tests/*.test.ts",
+		"demo": "tsx scripts/demo.ts",
+		"probe": "tsx scripts/probe.ts",
+		"visual-test": "tsx scripts/probe.ts && tsx scripts/visual-test.ts",
+		"tui-experiment": "tsx scripts/tui-experiment.ts",
+		"smoke": "tsx scripts/smoke.ts",
+		"preview": "tsx scripts/make-preview.ts",
+		"prepublishOnly": "npm run typecheck && npm test && npm run build"
+	},
+	"dependencies": {
+		"@resvg/resvg-js": "^2.6.2",
+		"mathjax-full": "^3.2.2"
+	},
+	"peerDependencies": {
+		"@earendil-works/pi-coding-agent": "*",
+		"@earendil-works/pi-tui": "*"
+	},
+	"peerDependenciesMeta": {
+		"@earendil-works/pi-coding-agent": {
+			"optional": true
+		},
+		"@earendil-works/pi-tui": {
+			"optional": true
+		}
+	},
+	"devDependencies": {
+		"@earendil-works/pi-coding-agent": "^1.1.0",
+		"@earendil-works/pi-tui": "^1.1.0",
+		"@types/node": "^22.20.5",
+		"tsx": "^4.20.6",
+		"typescript": "^5.9.3"
+	}
+}
