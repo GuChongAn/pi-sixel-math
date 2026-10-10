@@ -95,3 +95,17 @@ All of this was measured on real Windows Terminal rather than assumed:
 `npm run probe` reports the cursor advance for several image heights, verifies
 the cursor restore, checks that the `\x1b_G` marker is harmless, and reads the
 terminal's background color via OSC 10/11.
+
+## 7. Transparent image backgrounds
+
+The DCS introducer selects `P2 = 1` (`\x1bP0;1;0q`), the DEC "background
+transparent" setting. Windows Terminal inspects exactly this parameter to decide
+whether it fills the image rectangle with the current background color, so
+`P2 = 0` paints a black box around every formula:
+
+![P2 = 0 makes Windows Terminal fill the image rectangle](images/terminal.png)
+
+Unpainted pixels stay transparent (the terminal's image slice keeps alpha 0),
+which is what lets wallpapers, acrylic and light themes show through. The encoder
+also drops every pixel that matches the background color, so most of a formula's
+bounding box is never transmitted at all.

@@ -5,8 +5,8 @@ No browser, no WezTerm/Kitty, no WSL, no TeX install.
 
 [![npm](https://img.shields.io/npm/v/pi-sixel-math.svg)](https://www.npmjs.com/package/pi-sixel-math)
 [![CI](https://github.com/GuChongAn/pi-sixel-math/actions/workflows/ci.yml/badge.svg)](https://github.com/GuChongAn/pi-sixel-math/actions/workflows/ci.yml)
-[![node](https://img.shields.io/node/v/pi-sixel-math.svg)](package.json)
-[![license](https://img.shields.io/npm/l/pi-sixel-math.svg)](LICENSE)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![node](https://img.shields.io/badge/node-%E2%89%A5%2022.19-brightgreen.svg)](package.json)
 
 <img src="https://raw.githubusercontent.com/GuChongAn/pi-sixel-math/main/docs/images/hero.png" alt="Formulas rendered by pi-sixel-math" width="620">
 
@@ -79,8 +79,10 @@ environment variables; see [`src/config.ts`](src/config.ts).
 - `tuiMode: "fullscreen"` (alt screen) is not supported; the extension stays off
   there. Use `"tuiMode": "regular"`.
 - Formula baselines align to the row grid, not to the text baseline.
-- A rounded box is painted with the configured background color; if it differs
-  from the terminal's, a faint rectangle is visible around formulas.
+- Formula backgrounds are left unpainted, so the terminal background — wallpaper
+  or acrylic included — shows through. Glyph edges are blended against the
+  background color from OSC 11 / `/sixel-math bg`; with `transparent` they are
+  thresholded instead of blended.
 - Formulas taller than `maxRows` (12 by default) are scaled down, not split.
 - Copying a formula out of the terminal is not possible — the LaTeX in the
   transcript is the source of truth.
@@ -96,8 +98,8 @@ npm run visual-test   # the six acceptance formulas
 npm run tui-experiment # pi-tui renderer with streaming and redraws
 ```
 
-See [`docs/how-it-works.md`](docs/how-it-works.md) for the rendering pipeline and
-the terminal-specific details, and [`docs/testing.md`](docs/testing.md) for what
+See [`docs/how-it-works.md`](https://github.com/GuChongAn/pi-sixel-math/blob/main/docs/how-it-works.md) for the rendering pipeline and
+the terminal-specific details, and [`docs/testing.md`](https://github.com/GuChongAn/pi-sixel-math/blob/main/docs/testing.md) for what
 each test covers.
 
 ## License
